@@ -33,7 +33,9 @@ Proyecto de ciencia de datos que analiza y predice la calidad del aire en el Gra
 - **Control de versiones**: Git, GitHub, SourceTree
 - **Entorno**: Anaconda, Jupyter Notebook, PyCharm
 
+
 ## Arquitectura del proyecto (POO)
+```bash
 src/
 ├── datos/          # Clase GestorDatos: carga, limpia y exporta CSV/Excel
 ├── basedatos/      # Clase GestorBaseDatos: conexión y consultas SQL Server
@@ -47,7 +49,8 @@ data/
 ├── raw/            # Archivos CSV y Excel originales
 └── processed/      # Archivos procesados y limpios
 notebooks/
-└── exploracion_inicial.ipynb  # Jupyter notebook con EDA inicial
+└── exploracion_inicial.ipynb
+```
 
 ## Modelos de Machine Learning
 - **Tipo**: Clasificación supervisada
