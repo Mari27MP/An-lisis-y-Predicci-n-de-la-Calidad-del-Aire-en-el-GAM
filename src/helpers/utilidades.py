@@ -37,3 +37,29 @@ class Utilidades:
 
     def obtener_timestamp(self) -> str:
         return datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    def mes_a_numero(self, mes: str) -> int:
+        meses = {
+            "Enero": 1, "Febrero": 2, "Marzo": 3, "Abril": 4,
+            "Mayo": 5, "Junio": 6, "Julio": 7, "Agosto": 8,
+            "Setiembre": 9, "Octubre": 10, "Noviembre": 11, "Diciembre": 12
+        }
+        return meses.get(mes.strip(), 0)
+
+    def categorizar_ica(self, pm25: float) -> str:
+        if pm25 <= 12:
+            return "Buena"
+        elif pm25 <= 35.4:
+            return "Moderada"
+        elif pm25 <= 55.4:
+            return "Mala"
+        else:
+            return "Muy Mala"
+
+    def validar_dataframe(self, df, columnas_requeridas: list) -> bool:
+        faltantes = [c for c in columnas_requeridas if c not in df.columns]
+        if faltantes:
+            self.log_error(f"Columnas faltantes: {faltantes}")
+            return False
+        self.log_info("DataFrame validado correctamente")
+        return True
