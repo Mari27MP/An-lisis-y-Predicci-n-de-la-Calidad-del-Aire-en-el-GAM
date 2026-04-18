@@ -10,7 +10,7 @@ class ClienteAPI:
         self.url_clima = "https://archive-api.open-meteo.com/v1/archive"
         self.fecha_inicio = "2022-08-04"
         self.fecha_fin = "2024-12-31"
-        self.carpeta_salida = "data/raw"
+        self.carpeta_salida = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../data/raw")
         os.makedirs(self.carpeta_salida, exist_ok=True)
 
     def obtener_aire(self):
