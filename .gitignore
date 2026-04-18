@@ -1,0 +1,7 @@
+.idea/
+__pycache__/
+*.pyc
+.env
+data/processed/
+data/raw/aire_crudo.csv
+data/raw/clima_crudo.csv
