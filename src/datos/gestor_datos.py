@@ -124,3 +124,69 @@ class GestorDatos:
             raise ValueError("No hay datos limpios. Ejecute limpiar_datos() primero.")
         self.df_limpio.to_csv(ruta_salida, index=False)
         print(f"[GestorDatos] Archivo exportado: {ruta_salida}")
+
+    def limpiar_aire(self, ruta_archivo: str) -> pd.DataFrame:
+        """
+        Limpia el CSV crudo de calidad del aire descargado de la API.
+        Convierte time a datetime, extrae anio y mes, y agrega a nivel mensual.
+        """
+        df = pd.read_csv(ruta_archivo)
+
+        # 1. Convertir time a datetime
+        df['time'] = pd.to_datetime(df['time'])
+
+        # 2. Extraer anio y mes numero
+        df['anio'] = df['time'].dt.year
+        df['mes_num'] = df['time'].dt.month
+
+        # 3. Agregar a nivel mensual con promedio
+        df_mensual = df.groupby(['anio', 'mes_num'])[
+            ['pm2_5', 'pm10', 'nitrogen_dioxide', 'carbon_monoxide', 'ozone']
+        ].mean().reset_index()
+
+        # 4. Agregar columna mes en texto usando el diccionario de meses
+        meses = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril',
+                 5: 'Mayo', 6: 'Junio', 7: 'Julio', 8: 'Agosto',
+                 9: 'Setiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'}
+        df_mensual['mes'] = df_mensual['mes_num'].map(meses)
+
+        # 5. Redondear a 2 decimales
+        cols = ['pm2_5', 'pm10', 'nitrogen_dioxide', 'carbon_monoxide', 'ozone']
+        df_mensual[cols] = df_mensual[cols].round(2)
+
+        self.df_limpio = df_mensual
+        print(f"[GestorDatos] Aire limpio: {len(df_mensual)} filas")
+        return df_mensual
+
+    def limpiar_clima(self, ruta_archivo: str) -> pd.DataFrame:
+        """
+        Limpia el CSV crudo de clima descargado de la API.
+        Convierte time a datetime, extrae anio y mes, y agrega a nivel mensual.
+        """
+        df = pd.read_csv(ruta_archivo)
+
+        # 1. Convertir time a datetime
+        df['time'] = pd.to_datetime(df['time'])
+
+        # 2. Extraer anio y mes numero
+        df['anio'] = df['time'].dt.year
+        df['mes_num'] = df['time'].dt.month
+
+        # 3. Agregar a nivel mensual con promedio
+        df_mensual = df.groupby(['anio', 'mes_num'])[
+            ['temperature_2m', 'relative_humidity_2m', 'windspeed_10m']
+        ].mean().reset_index()
+
+        # 4. Agregar columna mes en texto
+        meses = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril',
+                 5: 'Mayo', 6: 'Junio', 7: 'Julio', 8: 'Agosto',
+                 9: 'Setiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'}
+        df_mensual['mes'] = df_mensual['mes_num'].map(meses)
+
+        # 5. Redondear a 2 decimales
+        cols = ['temperature_2m', 'relative_humidity_2m', 'windspeed_10m']
+        df_mensual[cols] = df_mensual[cols].round(2)
+
+        self.df_limpio = df_mensual
+        print(f"[GestorDatos] Clima limpio: {len(df_mensual)} filas")
+        return df_mensual
