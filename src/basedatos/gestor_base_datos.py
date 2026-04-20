@@ -1,4 +1,4 @@
-""""
+"""
 Módulo para conexión e integración con la base de datos SQL Server.
 Permite insertar datos desde CSVs y ejecutar consultas que retornan DataFrames.
 """
@@ -29,6 +29,15 @@ class GestorBaseDatos:
         except Exception as e:
             print(f"[GestorBaseDatos] Error al conectar: {e}")
             return None
+
+    def limpiar_tabla(self, tabla: str) -> None:
+        try:
+            with self.engine.connect() as conn:
+                conn.execute(text(f"DELETE FROM {tabla}"))
+                conn.commit()
+            print(f"[GestorBaseDatos] Tabla '{tabla}' limpiada.")
+        except Exception as e:
+            print(f"[GestorBaseDatos] Error al limpiar '{tabla}': {e}")
 
     def insertar_datos(self, df: pd.DataFrame, tabla: str) -> None:
         try:
