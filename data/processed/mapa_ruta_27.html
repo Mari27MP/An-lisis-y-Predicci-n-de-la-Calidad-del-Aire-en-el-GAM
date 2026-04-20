@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_8df709e36fd33eda734d3d543aaa5191 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_8df709e36fd33eda734d3d543aaa5191" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_8df709e36fd33eda734d3d543aaa5191 = L.map(
+                "map_8df709e36fd33eda734d3d543aaa5191",
+                {
+                    center: [9.9281, -84.0907],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_0b179eb4b6cbb83de7938a9f5c3101c5 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_0b179eb4b6cbb83de7938a9f5c3101c5.addTo(map_8df709e36fd33eda734d3d543aaa5191);
+        
+    
+            var marker_7c950fc1f9c34f9651d2d32146802434 = L.marker(
+                [9.9281, -84.0907],
+                {
+}
+            ).addTo(map_8df709e36fd33eda734d3d543aaa5191);
+        
+    
+            var icon_a235492a99df989938f24380222aeaa0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "car",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_551b6cabdc126085a2a33ed92dc9a6aa = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_dc8d2607936189122e227b2df71a3f54 = $(`<div id="html_dc8d2607936189122e227b2df71a3f54" style="width: 100.0%; height: 100.0%;">San José - Inicio Ruta 27</div>`)[0];
+                popup_551b6cabdc126085a2a33ed92dc9a6aa.setContent(html_dc8d2607936189122e227b2df71a3f54);
+            
+        
+
+        marker_7c950fc1f9c34f9651d2d32146802434.bindPopup(popup_551b6cabdc126085a2a33ed92dc9a6aa)
+        ;
+
+        
+    
+    
+            marker_7c950fc1f9c34f9651d2d32146802434.bindTooltip(
+                `<div>
+                     San José - Inicio Ruta 27
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7c950fc1f9c34f9651d2d32146802434.setIcon(icon_a235492a99df989938f24380222aeaa0);
+            
+    
+            var marker_2360f37a4f2117bdf829d032332d2059 = L.marker(
+                [9.8968, -84.2819],
+                {
+}
+            ).addTo(map_8df709e36fd33eda734d3d543aaa5191);
+        
+    
+            var icon_3fd71211de0324e468c836211e0eb3b3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "car",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ac6810338e316a55219de3954e954942 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a4887599ed4a23c6e278e5fdd3ca8203 = $(`<div id="html_a4887599ed4a23c6e278e5fdd3ca8203" style="width: 100.0%; height: 100.0%;">Punto Conteo 10540</div>`)[0];
+                popup_ac6810338e316a55219de3954e954942.setContent(html_a4887599ed4a23c6e278e5fdd3ca8203);
+            
+        
+
+        marker_2360f37a4f2117bdf829d032332d2059.bindPopup(popup_ac6810338e316a55219de3954e954942)
+        ;
+
+        
+    
+    
+            marker_2360f37a4f2117bdf829d032332d2059.bindTooltip(
+                `<div>
+                     Punto Conteo 10540
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_2360f37a4f2117bdf829d032332d2059.setIcon(icon_3fd71211de0324e468c836211e0eb3b3);
+            
+    
+            var marker_87491cac1552344da0d2982a56ebdb53 = L.marker(
+                [9.9019, -84.7356],
+                {
+}
+            ).addTo(map_8df709e36fd33eda734d3d543aaa5191);
+        
+    
+            var icon_a29a7d3ce8c302cc0a2d3f3cc406d6cc = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "car",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_708c839e6d8b9b196ae2d9c38a76d485 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_75f2ffb67bd70b03a4d663eec8a5febf = $(`<div id="html_75f2ffb67bd70b03a4d663eec8a5febf" style="width: 100.0%; height: 100.0%;">Caldera - Final Ruta 27</div>`)[0];
+                popup_708c839e6d8b9b196ae2d9c38a76d485.setContent(html_75f2ffb67bd70b03a4d663eec8a5febf);
+            
+        
+
+        marker_87491cac1552344da0d2982a56ebdb53.bindPopup(popup_708c839e6d8b9b196ae2d9c38a76d485)
+        ;
+
+        
+    
+    
+            marker_87491cac1552344da0d2982a56ebdb53.bindTooltip(
+                `<div>
+                     Caldera - Final Ruta 27
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_87491cac1552344da0d2982a56ebdb53.setIcon(icon_a29a7d3ce8c302cc0a2d3f3cc406d6cc);
+            
+</script>
+</html>
