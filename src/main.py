@@ -7,6 +7,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from datos.gestor_datos import GestorDatos
 from api.cliente_api import ClienteAPI
 from basedatos.gestor_base_datos import GestorBaseDatos
+from eda.procesador_eda import ProcesadorEDA
+from visualizacion.visualizador import Visualizador
+from modelos.modelo_ml import ModeloML
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -57,6 +60,10 @@ def main():
 
     gestor_bd = GestorBaseDatos()
 
+    gestor_bd.limpiar_tabla('flujo_vehicular')
+    gestor_bd.limpiar_tabla('calidad_aire')
+    gestor_bd.limpiar_tabla('clima')
+
     df_ruta = pd.read_csv(os.path.join(BASE, 'data/processed/ruta27_limpio.csv'))
     gestor_bd.insertar_datos(df_ruta, 'flujo_vehicular')
 
@@ -67,6 +74,30 @@ def main():
     gestor_bd.insertar_datos(df_clima_db, 'clima')
 
     print("\n=== Paso 4 completado ===")
+
+    # ── Paso 5: EDA ────────────────────────────────────────────────────────
+    print("\n--- Ejecutando analisis exploratorio de datos ---")
+
+    eda = ProcesadorEDA()
+    eda.ejecutar_eda_completo()
+
+    print("\n=== Paso 5 completado ===")
+
+    # ── Paso 6: Visualizaciones ────────────────────────────────────────────
+    print("\n--- Generando visualizaciones ---")
+
+    viz = Visualizador()
+    viz.ejecutar_visualizaciones()
+
+    print("\n=== Paso 6 completado ===")
+
+    # ── Paso 7: Modelo ML ──────────────────────────────────────────────────
+    print("\n--- Ejecutando modelos de Machine Learning ---")
+
+    modelo = ModeloML()
+    modelo.ejecutar_modelos()
+
+    print("\n=== Paso 7 completado ===")
 
 
 if __name__ == "__main__":
