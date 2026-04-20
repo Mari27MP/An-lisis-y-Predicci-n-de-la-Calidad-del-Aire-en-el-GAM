@@ -81,23 +81,26 @@ class Visualizador:
     # CALIDAD DEL AIRE
     # ─────────────────────────────────────────
 
-    def grafico_contaminantes_por_anio(self):
+    def grafico_flujo_por_mes(self):
         """
-        Genera un gráfico de líneas de PM2.5 y NO2 por año.
+        Genera un gráfico de líneas del flujo vehicular promedio por mes.
         """
+        orden_meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                       'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre']
+        df = self.df_flujo.groupby('mes')['total'].mean().reset_index()
+        df['mes'] = pd.Categorical(df['mes'], categories=orden_meses, ordered=True)
+        df = df.sort_values('mes')
+        df = df.dropna(subset=['mes'])
         plt.figure(figsize=(12, 6))
-        sns.lineplot(data=self.df_aire, x='anio', y='pm2_5',
-                     marker='o', label='PM2.5', color='red')
-        sns.lineplot(data=self.df_aire, x='anio', y='nitrogen_dioxide',
-                     marker='s', label='NO2', color='orange')
-        plt.title('Evolución de Contaminantes por Año — GAM Costa Rica', fontsize=14)
-        plt.xlabel('Año')
-        plt.ylabel('Concentración')
-        plt.legend()
+        sns.lineplot(data=df, x='mes', y='total', marker='o', color='steelblue')
+        plt.title('Flujo Vehicular Promedio por Mes — Ruta 27', fontsize=14)
+        plt.xlabel('Mes')
+        plt.ylabel('Promedio de Vehículos')
+        plt.xticks(rotation=45)
         plt.tight_layout()
-        plt.savefig('data/processed/contaminantes_por_anio.png')
+        plt.savefig('data/processed/flujo_por_mes.png')
         plt.show()
-        print("[Visualizador] Gráfico contaminantes por año generado.")
+        print("[Visualizador] Gráfico flujo por mes generado.")
 
     def heatmap_correlacion(self):
         """
