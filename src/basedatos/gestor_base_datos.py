@@ -10,18 +10,16 @@ from sqlalchemy import create_engine, text
 class GestorBaseDatos:
 
     def __init__(self):
-        self.servidor = "CLARETRJ\\MMSP"
+        self.servidor = "MARIANAMENDEZP\\MIMSP"
         self.base_datos = "CalidadAireGAM"
-        self.usuario = "sa"
-        self.contrasena = "Cla.06bin"
         self.engine = self._conectar()
 
     def _conectar(self):
         try:
             cadena = (
-                f"mssql+pyodbc://{self.usuario}:{self.contrasena}"
-                f"@{self.servidor}/{self.base_datos}"
-                f"?driver=ODBC+Driver+17+for+SQL+Server"
+                "mssql+pyodbc://@MARIANAMENDEZP\\MIMSP/CalidadAireGAM"
+                "?driver=ODBC+Driver+17+for+SQL+Server"
+                "&trusted_connection=yes"
             )
             engine = create_engine(cadena)
             print("[GestorBaseDatos] Conexion exitosa a SQL Server.")
