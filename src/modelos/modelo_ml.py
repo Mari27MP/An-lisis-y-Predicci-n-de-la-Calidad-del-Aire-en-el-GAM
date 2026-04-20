@@ -6,13 +6,13 @@ Implementa clasificación supervisada con múltiples algoritmos.
 
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report
 from basedatos.gestor_base_datos import GestorBaseDatos
 
 
@@ -56,7 +56,6 @@ class ModeloML:
 
         df = pd.merge(df_flujo, df_aire, on=['anio', 'mes'], how='inner')
         df = pd.merge(df, df_clima, on=['anio', 'mes'], how='inner')
-
         df['categoria_ica'] = df['pm2_5'].apply(self._categorizar_ica)
 
         self.df = df
@@ -95,7 +94,6 @@ class ModeloML:
 
         X = self.df[features]
         y = self.le.fit_transform(self.df['categoria_ica'])
-
         X_scaled = self.scaler.fit_transform(X)
 
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
@@ -123,7 +121,7 @@ class ModeloML:
         print(f" RANDOM FOREST — Accuracy: {accuracy:.2%}")
         print(f"{'='*50}")
         print(classification_report(self.y_test, y_pred,
-              target_names=self.le.classes_))
+              target_names=self.le.classes_, zero_division=0))
         return accuracy
 
     def entrenar_arbol_decision(self):
@@ -142,7 +140,7 @@ class ModeloML:
         print(f" ÁRBOL DE DECISIÓN — Accuracy: {accuracy:.2%}")
         print(f"{'='*50}")
         print(classification_report(self.y_test, y_pred,
-              target_names=self.le.classes_))
+              target_names=self.le.classes_, zero_division=0))
         return accuracy
 
     def entrenar_knn(self):
@@ -161,30 +159,129 @@ class ModeloML:
         print(f" KNN — Accuracy: {accuracy:.2%}")
         print(f"{'='*50}")
         print(classification_report(self.y_test, y_pred,
-              target_names=self.le.classes_))
+              target_names=self.le.classes_, zero_division=0))
         return accuracy
 
-    def entrenar_regresion_logistica(self):
+    # ─────────────────────────────────────────
+    # CROSS-VALIDACIÓN
+    # ─────────────────────────────────────────
+
+    def cross_validacion(self) -> None:
         """
-        Entrena y evalúa un modelo de Regresión Logística.
+        Evalúa los modelos usando Cross-Validación con 5 folds.
+        Proporciona una evaluación más robusta del rendimiento real.
+        """
+        X = self.scaler.fit_transform(
+            self.df[['total_vehiculos', 'pm2_5', 'nitrogen_dioxide',
+                     'ozone', 'temperature_2m', 'relative_humidity_2m', 'windspeed_10m']]
+        )
+        y = self.le.fit_transform(self.df['categoria_ica'])
+
+        modelos = {
+            'Random Forest': RandomForestClassifier(n_estimators=100, random_state=42),
+            'Árbol de Decisión': DecisionTreeClassifier(random_state=42),
+            'KNN': KNeighborsClassifier(n_neighbors=3)
+        }
+
+        print(f"\n{'='*50}")
+        print(" CROSS-VALIDACIÓN (5 Folds)")
+        print(f"{'='*50}")
+
+        for nombre, modelo in modelos.items():
+            scores = cross_val_score(modelo, X, y, cv=5, scoring='accuracy')
+            print(f"\n{nombre}:")
+            print(f"  Accuracy por fold: {[f'{s:.2%}' for s in scores]}")
+            print(f"  Promedio: {scores.mean():.2%} | Desviación: {scores.std():.2%}")
+
+    # ─────────────────────────────────────────
+    # GRID SEARCH
+    # ─────────────────────────────────────────
+
+    def optimizar_random_forest(self) -> dict:
+        """
+        Optimiza los hiperparámetros del Random Forest usando GridSearchCV.
 
         Returns:
-            float: Accuracy del modelo.
+            dict: Mejores parámetros encontrados.
         """
-        modelo = LogisticRegression(random_state=42, max_iter=1000, solver='lbfgs')
-        modelo.fit(self.X_train, self.y_train)
-        y_pred = modelo.predict(self.X_test)
-        accuracy = accuracy_score(self.y_test, y_pred)
-        self.resultados['Regresión Logística'] = accuracy
+        X = self.scaler.fit_transform(
+            self.df[['total_vehiculos', 'pm2_5', 'nitrogen_dioxide',
+                     'ozone', 'temperature_2m', 'relative_humidity_2m', 'windspeed_10m']]
+        )
+        y = self.le.fit_transform(self.df['categoria_ica'])
+
+        parametros = {
+            'n_estimators': [50, 100, 200],
+            'max_depth': [None, 5, 10],
+            'min_samples_split': [2, 5]
+        }
+
+        grid = GridSearchCV(
+            RandomForestClassifier(random_state=42),
+            parametros,
+            cv=5,
+            scoring='accuracy'
+        )
+        grid.fit(X, y)
+
         print(f"\n{'='*50}")
-        print(f" REGRESIÓN LOGÍSTICA — Accuracy: {accuracy:.2%}")
+        print(" OPTIMIZACIÓN GRID SEARCH — Random Forest")
         print(f"{'='*50}")
-        print(classification_report(self.y_test, y_pred,
-                                    target_names=self.le.classes_, zero_division=0))
-        return accuracy
+        print(f"Mejores parámetros: {grid.best_params_}")
+        print(f"Mejor accuracy: {grid.best_score_:.2%}")
 
+        return grid.best_params_
 
+    # ─────────────────────────────────────────
+    # PREDICCIÓN DE NUEVOS DATOS
+    # ─────────────────────────────────────────
 
+    def predecir_nuevo(self, total_vehiculos: int, pm2_5: float,
+                       nitrogen_dioxide: float, ozone: float,
+                       temperature_2m: float, relative_humidity_2m: float,
+                       windspeed_10m: float) -> str:
+        """
+        Predice la categoría ICA para un nuevo registro de datos.
+
+        Args:
+            total_vehiculos (int): Total de vehículos en circulación.
+            pm2_5 (float): Concentración de PM2.5 en μg/m³.
+            nitrogen_dioxide (float): Concentración de NO2.
+            ozone (float): Concentración de Ozono.
+            temperature_2m (float): Temperatura en °C.
+            relative_humidity_2m (float): Humedad relativa en %.
+            windspeed_10m (float): Velocidad del viento en km/h.
+
+        Returns:
+            str: Categoría ICA predicha.
+        """
+        modelo = RandomForestClassifier(n_estimators=100, random_state=42)
+        X = self.scaler.fit_transform(
+            self.df[['total_vehiculos', 'pm2_5', 'nitrogen_dioxide',
+                     'ozone', 'temperature_2m', 'relative_humidity_2m', 'windspeed_10m']]
+        )
+        y = self.le.fit_transform(self.df['categoria_ica'])
+        modelo.fit(X, y)
+
+        nuevo = self.scaler.transform([[
+            total_vehiculos, pm2_5, nitrogen_dioxide,
+            ozone, temperature_2m, relative_humidity_2m, windspeed_10m
+        ]])
+        prediccion = modelo.predict(nuevo)
+        categoria = self.le.inverse_transform(prediccion)[0]
+
+        print(f"\n{'='*50}")
+        print(" PREDICCIÓN PARA NUEVO REGISTRO")
+        print(f"{'='*50}")
+        print(f"  Total vehículos: {total_vehiculos:,}")
+        print(f"  PM2.5: {pm2_5} μg/m³")
+        print(f"  NO2: {nitrogen_dioxide}")
+        print(f"  Ozono: {ozone}")
+        print(f"  Temperatura: {temperature_2m}°C")
+        print(f"  Humedad: {relative_humidity_2m}%")
+        print(f"  Viento: {windspeed_10m} km/h")
+        print(f"\n   Categoría ICA predicha: {categoria}")
+        return categoria
 
     # ─────────────────────────────────────────
     # COMPARACIÓN
@@ -206,6 +303,10 @@ class ModeloML:
         print(df_resultados.to_string(index=False))
         return df_resultados
 
+    # ─────────────────────────────────────────
+    # EJECUTAR TODO
+    # ─────────────────────────────────────────
+
     def ejecutar_modelos(self):
         """
         Ejecuta el pipeline completo de Machine Learning.
@@ -216,8 +317,18 @@ class ModeloML:
         self.entrenar_random_forest()
         self.entrenar_arbol_decision()
         self.entrenar_knn()
-        # Regresión Logística requiere mínimo 2 clases en entrenamiento
-        # No compatible con dataset desbalanceado (28 Buena vs 1 Moderada)
+        # Regresión Logística excluida por dataset desbalanceado
         # self.entrenar_regresion_logistica()
         self.comparar_modelos()
-        print("\nENTRENAMIENTO COMPLETADO\n")
+        self.cross_validacion()
+        self.optimizar_random_forest()
+        self.predecir_nuevo(
+            total_vehiculos=950000,
+            pm2_5=8.5,
+            nitrogen_dioxide=15.2,
+            ozone=32.1,
+            temperature_2m=20.5,
+            relative_humidity_2m=78.0,
+            windspeed_10m=7.5
+        )
+        print("\n ENTRENAMIENTO COMPLETADO\n")
