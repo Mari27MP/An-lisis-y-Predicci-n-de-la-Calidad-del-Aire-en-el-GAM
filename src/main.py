@@ -102,31 +102,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# ── Paso 5: Análisis Exploratorio de Datos ────────────────────────────
-    print("\n--- Ejecutando análisis exploratorio de datos ---")
-
-    from eda.procesador_eda import ProcesadorEDA
-    eda = ProcesadorEDA()
-    eda.ejecutar_eda_completo()
-
-    print("\n=== Paso 5 completado ===")
-
-    # ── Paso 6: Visualizaciones ───────────────────────────────────────────
-    print("\n--- Generando visualizaciones ---")
-
-    from visualizacion.visualizador import Visualizador
-    viz = Visualizador()
-    viz.ejecutar_visualizaciones()
-
-    print("\n=== Paso 6 completado ===")
-
-    # ── Paso 7: Entrenamiento de Modelos ML ───────────────────────────────
-    print("\n--- Entrenando modelos de Machine Learning ---")
-
-    from modelos.modelo_ml import ModeloML
-    modelo = ModeloML()
-    modelo.ejecutar_modelos()
-
-    print("\n=== Paso 7 completado ===")
