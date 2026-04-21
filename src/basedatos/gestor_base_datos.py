@@ -1,6 +1,5 @@
-"""
+""""
 Módulo para conexión e integración con la base de datos SQL Server.
-Permite insertar datos desde CSVs y ejecutar consultas que retornan DataFrames.
 """
 
 import pandas as pd
@@ -10,18 +9,23 @@ from sqlalchemy import create_engine, text
 class GestorBaseDatos:
 
     def __init__(self):
-        self.servidor = "MARIANAMENDEZP\\MIMSP"
+        self.servidor = "CLARETRJ\\MMSP"
         self.base_datos = "CalidadAireGAM"
+        self.usuario = "sa"
+        self.contrasena = "Cla.06bin"
         self.engine = self._conectar()
 
     def _conectar(self):
         try:
             cadena = (
-                "mssql+pyodbc://@MARIANAMENDEZP\\MIMSP/CalidadAireGAM"
-                "?driver=ODBC+Driver+17+for+SQL+Server"
-                "&trusted_connection=yes"
+                f"mssql+pyodbc://{self.usuario}:{self.contrasena}"
+                f"@{self.servidor}/{self.base_datos}"
+                f"?driver=ODBC+Driver+17+for+SQL+Server"
+                f"&TrustServerCertificate=yes"
             )
             engine = create_engine(cadena)
+            with engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
             print("[GestorBaseDatos] Conexion exitosa a SQL Server.")
             return engine
         except Exception as e:
