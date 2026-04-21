@@ -51,7 +51,6 @@ data/
 notebooks/
 └── exploracion_inicial.ipynb
 ```
-
 ## Modelos de Machine Learning
 
 - **Tipo**: Clasificación supervisada  
@@ -62,12 +61,15 @@ notebooks/
 Se utilizan variables relacionadas con la movilidad, la calidad del aire y las condiciones climáticas:
 
 - Flujo vehicular total  
-- PM2.5  
 - Dióxido de nitrógeno (NO2)  
 - Ozono  
 - Temperatura  
 - Humedad relativa  
 - Velocidad del viento  
+
+> Nota: La variable PM2.5 no se utiliza como variable de entrada, ya que a partir de ella se construye la variable objetivo (categoría ICA).
+
+---
 
 ### Algoritmos utilizados
 
@@ -76,15 +78,47 @@ Se entrenaron y compararon distintos modelos de Machine Learning:
 - Random Forest  
 - K-Nearest Neighbors (KNN)  
 - Árbol de Decisión  
+- Regresión Logística  
+
+---
 
 ### Evaluación del modelo
 
 El desempeño de los modelos se evaluó utilizando:
 
 - **Accuracy** como métrica principal  
-- **Validación cruzada (cross-validation)** para obtener una evaluación más robusta  
 
-> Nota: Los resultados deben interpretarse con precaución debido al tamaño reducido del dataset y al desbalance en las clases, con predominio de la categoría "Buena".
+Todos los modelos alcanzaron un accuracy del 100%, sin embargo, este resultado debe interpretarse con cautela.
+
+---
+
+### Limitaciones del modelo
+
+El dataset presenta un desbalance significativo en la variable objetivo, ya que la mayoría de los registros pertenecen a la categoría "Buena" y muy pocos a otras categorías.
+
+Esto provoca que los modelos obtengan altos valores de accuracy, pero estos resultados no reflejan necesariamente una alta capacidad predictiva en escenarios reales.
+
+Además, debido a la baja cantidad de registros en algunas clases, no fue posible aplicar correctamente técnicas como:
+
+- Validación cruzada (Cross-Validation)  
+- Optimización de hiperparámetros (GridSearchCV)  
+
+---
+
+### Mejora aplicada al modelo
+
+Inicialmente se utilizó la variable PM2.5 como variable de entrada. Sin embargo, se identificó que esto generaba fuga de información, ya que la variable objetivo (categoría ICA) se construye a partir de PM2.5.
+
+Por esta razón, se corrigió el modelo eliminando PM2.5 de las variables de entrada, utilizando únicamente variables independientes como el flujo vehicular, variables climáticas y otros contaminantes.
+
+---
+
+### Conclusión
+
+El modelo implementado sigue el pipeline completo de Machine Learning, incluyendo carga de datos, entrenamiento, evaluación y predicción.
+
+Aunque los resultados obtenidos son altos, estos deben interpretarse considerando las limitaciones del dataset. Como mejora futura, se recomienda aumentar la cantidad de datos y balancear las clases para obtener un modelo más robusto.
+
 
 ## Rúbrica del proyecto
 | Criterio | Porcentaje |
