@@ -53,11 +53,38 @@ notebooks/
 ```
 
 ## Modelos de Machine Learning
-- **Tipo**: Clasificación supervisada
-- **Variable objetivo**: Categoría ICA (Buena / Moderada / Mala / Muy Mala)
-- **Variables de entrada**: Flujo vehicular, temperatura, humedad, velocidad del viento, mes, año
-- **Algoritmos**: Random Forest, KNN, Árbol de Decisión, Regresión Logística
-- **Métrica de evaluación**: Accuracy (mínimo 90%)
+
+- **Tipo**: Clasificación supervisada  
+- **Variable objetivo**: Categoría ICA (Buena / Moderada / Mala / Muy Mala)  
+
+### Variables de entrada
+
+Se utilizan variables relacionadas con la movilidad, la calidad del aire y las condiciones climáticas:
+
+- Flujo vehicular total  
+- PM2.5  
+- Dióxido de nitrógeno (NO2)  
+- Ozono  
+- Temperatura  
+- Humedad relativa  
+- Velocidad del viento  
+
+### Algoritmos utilizados
+
+Se entrenaron y compararon distintos modelos de Machine Learning:
+
+- Random Forest  
+- K-Nearest Neighbors (KNN)  
+- Árbol de Decisión  
+
+### Evaluación del modelo
+
+El desempeño de los modelos se evaluó utilizando:
+
+- **Accuracy** como métrica principal  
+- **Validación cruzada (cross-validation)** para obtener una evaluación más robusta  
+
+> Nota: Los resultados deben interpretarse con precaución debido al tamaño reducido del dataset y al desbalance en las clases, con predominio de la categoría "Buena".
 
 ## Rúbrica del proyecto
 | Criterio | Porcentaje |
