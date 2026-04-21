@@ -273,7 +273,6 @@ elif seccion == "🤖 Predicción ICA":
             modelo.dividir_datos()
             categoria = modelo.predecir_nuevo(
                 total_vehiculos=total_vehiculos,
-                pm2_5=float(aire_mes['pm2_5']) if not pd.isna(aire_mes['pm2_5']) else 8.5,
                 nitrogen_dioxide=float(aire_mes['nitrogen_dioxide']) if not pd.isna(aire_mes['nitrogen_dioxide']) else 15.2,
                 ozone=float(aire_mes['ozone']) if not pd.isna(aire_mes['ozone']) else 32.1,
                 temperature_2m=float(clima_mes['temperature_2m']) if not pd.isna(clima_mes['temperature_2m']) else 20.5,
