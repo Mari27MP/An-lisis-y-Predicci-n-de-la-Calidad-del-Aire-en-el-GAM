@@ -35,7 +35,7 @@ Proyecto de ciencia de datos que analiza y predice la calidad del aire en el Gra
 
 
 ## Arquitectura del proyecto (POO)
-bash
+```bash
 src/
 ├── datos/          # Clase GestorDatos: carga, limpia y exporta CSV/Excel
 ├── basedatos/      # Clase GestorBaseDatos: conexión y consultas SQL Server
@@ -50,6 +50,8 @@ data/
 └── processed/      # Archivos procesados y limpios
 notebooks/
 └── exploracion_inicial.ipynb
+...
+```
 
 ## Modelos de Machine Learning
 
